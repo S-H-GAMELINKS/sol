@@ -15,6 +15,7 @@ int main(int argc, char **argv) {
     if (new_app) {
         std::cout << "Created New App " << app_name << std::endl;
         std::experimental::filesystem::copy(std::experimental::filesystem::absolute("sol/src"), app_name);
+        std::experimental::filesystem::copy(std::experimental::filesystem::absolute("sol/cpp-httplib"), app_name + "/cpp-httplib");
     }
 
     return 0;
