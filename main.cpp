@@ -18,6 +18,7 @@ int main(int argc, char **argv) {
         std::cout << "Created New App " << app_name << std::endl;
         fs::copy(fs::absolute("sol/src"), app_name);
         fs::copy(fs::absolute("sol/cpp-httplib"), app_name + "/cpp-httplib");
+        fs::copy(fs::absolute("sol/src/static"), app_name + "/static");
     }
 
     return 0;
