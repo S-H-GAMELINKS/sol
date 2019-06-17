@@ -1,3 +1,5 @@
 {
-    
+    "dependencies": {
+        "webpack": "^4.34.0"
+    }
 }
