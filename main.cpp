@@ -16,9 +16,8 @@ int main(int argc, char **argv) {
 
     if (new_app) {
         std::cout << "Created New App " << app_name << std::endl;
-        fs::copy(fs::absolute("sol/src"), app_name);
+        fs::copy(fs::absolute("sol/src"), app_name, fs::copy_options::recursive);
         fs::copy(fs::absolute("sol/cpp-httplib"), app_name + "/cpp-httplib");
-        fs::copy(fs::absolute("sol/src/static"), app_name + "/static");
         std::string cmd = "cd " + app_name + " && cd static && yarn install";
         system(cmd.c_str());
     }
