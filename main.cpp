@@ -1,5 +1,6 @@
 #include <CLI/CLI.hpp>
 #include <fstream>
+#include <regex>
 #include <experimental/filesystem>
 
 namespace fs = std::experimental::filesystem;
@@ -14,10 +15,13 @@ int main(int argc, char **argv) {
 
     CLI11_PARSE(app, argc, argv);
 
+    fs::path p = "/proc/self/exe";
+    std::string path = std::regex_replace(fs::read_symlink(p).string<char>(), std::regex("a.out"), "");
+
     if (new_app) {
         std::cout << "Created New App " << app_name << std::endl;
-        fs::copy(fs::absolute("sol/src"), app_name, fs::copy_options::recursive);
-        fs::copy(fs::absolute("sol/cpp-httplib"), app_name + "/cpp-httplib");
+        fs::copy(path + "/src", app_name, fs::copy_options::recursive);
+        fs::copy(path + "/cpp-httplib", app_name + "/cpp-httplib");
         std::string cmd = "cd " + app_name + " && cd static && yarn install";
         system(cmd.c_str());
     }
