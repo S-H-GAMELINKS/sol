@@ -17,6 +17,10 @@ int main(int argc, char **argv) {
     std::string controller_name;
     new_controller->add_option("controller", controller_name, "Controller name");
 
+    CLI::App *new_component = app.add_subcommand("component", "Create New Component");
+    std::string component_name;
+    new_component->add_option("component", component_name, "Component name");
+
     CLI11_PARSE(app, argc, argv);
 
     fs::path p = "/proc/self/exe";
@@ -33,6 +37,14 @@ int main(int argc, char **argv) {
     if (app.got_subcommand(new_controller)) {
         std::cout << "Created New Controller " << controller_name << std::endl;
         fs::copy(path + "templates/controllers/template_controller.js", "static/src/controllers/" + controller_name + "_controller.js");
+    }
+
+    if (app.got_subcommand(new_component)) {
+        std::cout << "Created New Component " << component_name << std::endl;
+        if (!fs::exists("static/src/components"))
+            fs::create_directories("static/src/components");
+            
+        fs::copy(path + "templates/components/template.svelte", "static/src/components/" + component_name + ".svelte");
     }
 
     return 0;
