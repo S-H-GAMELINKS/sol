@@ -2,4 +2,6 @@
     let word = "Hello World!"
 </script>
 
-<h1>{ word }</h1>
+<div data-controller="hello">
+    <h1>{ word }</h1>
+</div>
