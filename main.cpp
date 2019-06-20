@@ -13,11 +13,14 @@ int main(int argc, char **argv) {
     std::string app_name;
     new_app->add_option("app", app_name, "App name");
 
-    CLI::App *new_controller = app.add_subcommand("controller", "Create New Controller");
+    CLI::App *generate_command = app.add_subcommand("generate", "Generate New File");
+    generate_command->require_subcommand(0,1);
+
+    CLI::App *new_controller = generate_command->add_subcommand("controller", "Create New Controller");
     std::string controller_name;
     new_controller->add_option("controller", controller_name, "Controller name");
 
-    CLI::App *new_component = app.add_subcommand("component", "Create New Component");
+    CLI::App *new_component = generate_command->add_subcommand("component", "Create New Component");
     std::string component_name;
     new_component->add_option("component", component_name, "Component name");
 
@@ -34,12 +37,12 @@ int main(int argc, char **argv) {
         system(cmd.c_str());
     }
 
-    if (app.got_subcommand(new_controller)) {
+    if (generate_command->got_subcommand(new_controller)) {
         std::cout << "Created New Controller " << controller_name << std::endl;
         fs::copy(path + "templates/controllers/template_controller.js", "static/src/controllers/" + controller_name + "_controller.js");
     }
 
-    if (app.got_subcommand(new_component)) {
+    if (generate_command->got_subcommand(new_component)) {
         std::cout << "Created New Component " << component_name << std::endl;
         if (!fs::exists("static/src/components"))
             fs::create_directories("static/src/components");
