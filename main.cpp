@@ -14,6 +14,9 @@ int main(int argc, char **argv) {
     std::string app_name;
     new_app->add_option("app", app_name, "App name");
 
+    CLI::App *server = app.add_subcommand("server", "Run Server");
+    server->add_option("server", "Running Server");
+
     CLI::App *generate_command = app.add_subcommand("generate", "Generate New File");
     generate_command->require_subcommand(0,1);
 
@@ -35,6 +38,12 @@ int main(int argc, char **argv) {
         fs::copy(path + "src", app_name, fs::copy_options::recursive);
         fs::copy(path + "cpp-httplib", app_name + "/cpp-httplib");
         std::string cmd = "cd " + app_name + " && cd static && yarn install";
+        system(cmd.c_str());
+    }
+
+    if (app.got_subcommand(server)) {
+        std::cout << "Running Server" << std::endl;
+        std::string cmd = "g++ main.cpp cpp-httplib/httplib.h -pthread && ./a.out";
         system(cmd.c_str());
     }
 
