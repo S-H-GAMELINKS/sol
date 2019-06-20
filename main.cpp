@@ -1,6 +1,7 @@
 #include <CLI/CLI.hpp>
 #include <fstream>
 #include <regex>
+#include <vector>
 #include <experimental/filesystem>
 
 namespace fs = std::experimental::filesystem;
@@ -17,11 +18,11 @@ int main(int argc, char **argv) {
     generate_command->require_subcommand(0,1);
 
     CLI::App *new_controller = generate_command->add_subcommand("controller", "Create New Controller");
-    std::string controller_name;
+    std::vector<std::string> controller_name;
     new_controller->add_option("controller", controller_name, "Controller name");
 
     CLI::App *new_component = generate_command->add_subcommand("component", "Create New Component");
-    std::string component_name;
+    std::vector<std::string> component_name;
     new_component->add_option("component", component_name, "Component name");
 
     CLI11_PARSE(app, argc, argv);
@@ -38,16 +39,20 @@ int main(int argc, char **argv) {
     }
 
     if (generate_command->got_subcommand(new_controller)) {
-        std::cout << "Created New Controller " << controller_name << std::endl;
-        fs::copy(path + "templates/controllers/template_controller.js", "static/src/controllers/" + controller_name + "_controller.js");
+        for (auto&& controller : controller_name) {
+            std::cout << "Created New Controller " << controller << std::endl;
+            fs::copy(path + "templates/controllers/template_controller.js", "static/src/controllers/" + controller + "_controller.js");
+        }
     }
 
     if (generate_command->got_subcommand(new_component)) {
-        std::cout << "Created New Component " << component_name << std::endl;
-        if (!fs::exists("static/src/components"))
-            fs::create_directories("static/src/components");
+        for (auto&& component : component_name) {
+            std::cout << "Created New Component " << component << std::endl;
+            if (!fs::exists("static/src/components"))
+                fs::create_directories("static/src/components");
             
-        fs::copy(path + "templates/components/template.svelte", "static/src/components/" + component_name + ".svelte");
+            fs::copy(path + "templates/components/template.svelte", "static/src/components/" + component + ".svelte");
+        }
     }
 
     return 0;
