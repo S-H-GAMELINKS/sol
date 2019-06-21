@@ -13,6 +13,14 @@ const std::string bin_path(){
     return std::regex_replace(fs::read_symlink(p).string<char>(), std::regex("bin/sol"), "");
 }
 
+CLI::App *create_subcommand(CLI::App& app, const std::string& command, std::string& args, const std::string& content) {
+
+    CLI::App *sub_command = app.add_subcommand(command, content);
+    sub_command->add_option(command, args, content);
+
+    return sub_command;
+}
+
 CLI::App *create_subcommand(CLI::App& app, const std::string& command, const std::string& content) {
 
     CLI::App *server = app.add_subcommand(command, content);
@@ -25,9 +33,8 @@ int main(int argc, char **argv) {
     CLI::App app;
 
     // Define options
-    CLI::App *new_app = app.add_subcommand("new", "Create New App");
     std::string app_name;
-    new_app->add_option("app", app_name, "App name");
+    CLI::App *new_app = create_subcommand(app, "new", app_name, "Create New App");    
 
     CLI::App *server = create_subcommand(app, "server", "Running Server");
     CLI::App *build = create_subcommand(app, "build", "Build App");
