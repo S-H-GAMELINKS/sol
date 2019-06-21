@@ -37,6 +37,14 @@ CLI::App *create_generate_command(CLI::App *generate, const std::string& command
     return generate_command;
 }
 
+void run_subcommand(CLI::App& app, CLI::App *sub_command, const std::string& content, const std::string& command) {
+    if (app.got_subcommand(sub_command)) {
+        std::cout << content << std::endl;
+        std::string cmd = command;
+        system(cmd.c_str());
+    }
+}
+
 int main(int argc, char **argv) {
     CLI::App app;
 
@@ -71,17 +79,9 @@ int main(int argc, char **argv) {
         system(cmd.c_str());
     }
 
-    if (app.got_subcommand(server)) {
-        std::cout << "Running Server" << std::endl;
-        std::string cmd = "g++ main.cpp cpp-httplib/httplib.h -pthread && ./a.out";
-        system(cmd.c_str());
-    }
+    run_subcommand(app, server, "Running Server", "g++ main.cpp cpp-httplib/httplib.h -pthread && ./a.out");
 
-    if (app.got_subcommand(build)) {
-        std::cout << "Build App" << std::endl;
-        std::string cmd = "cd static && yarn build && cd .. && g++ main.cpp cpp-httplib/httplib.h -pthread";
-        system(cmd.c_str());
-    }
+    run_subcommand(app, build, "Build App", "cd static && yarn build && cd .. && g++ main.cpp cpp-httplib/httplib.h -pthread");
 
     if (generate_command->got_subcommand(new_controller)) {
         for (auto&& controller : controller_name) {
