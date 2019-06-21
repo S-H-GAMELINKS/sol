@@ -1,6 +1,7 @@
 #include <CLI/CLI.hpp>
 #include <fstream>
 #include <regex>
+#include <array>
 #include <vector>
 #include <experimental/filesystem>
 
@@ -55,6 +56,27 @@ void run_subcommand(CLI::App& app, CLI::App *sub_command, const std::string& con
     }
 }
 
+void run_subcommand(CLI::App *generate, CLI::App *subcommand, const std::string& path, const std::vector<std::string> args, std::array<std::string, 4> contents) {
+    if (generate->got_subcommand(subcommand)) {
+        for (auto&& arg : args) {
+            std::cout << contents[0] << arg << std::endl;
+            fs::copy(path + contents[1], contents[2] + arg + contents[3]);
+        }
+    }
+}
+
+void run_subcommand(CLI::App *generate, CLI::App *subcommand, const std::string& path, const std::vector<std::string> args, std::array<std::string, 5> contents) {
+    if (generate->got_subcommand(subcommand)) {
+        for (auto&& arg : args) {
+            std::cout << contents[0] << arg << std::endl;
+            if (!fs::exists(contents[1]))
+                fs::create_directories(contents[1]);
+
+            fs::copy(path + contents[2], contents[3] + arg + contents[4]);
+        }
+    }
+}
+
 int main(int argc, char **argv) {
     CLI::App app;
 
@@ -87,32 +109,17 @@ int main(int argc, char **argv) {
 
     run_subcommand(app, build, "Build App", "cd static && yarn build && cd .. && g++ main.cpp cpp-httplib/httplib.h -pthread");
 
-    if (generate_command->got_subcommand(new_controller)) {
-        for (auto&& controller : controller_name) {
-            std::cout << "Created New Controller " << controller << std::endl;
-            fs::copy(path + "templates/controllers/template_controller.js", "static/src/controllers/" + controller + "_controller.js");
-        }
-    }
+    std::array<std::string, 4> controller_contents = {"Created New Controller ", "templates/controllers/template_controller.js", "static/src/controllers/", "_controller.js"};
 
-    if (generate_command->got_subcommand(new_component)) {
-        for (auto&& component : component_name) {
-            std::cout << "Created New Component " << component << std::endl;
-            if (!fs::exists("static/src/components"))
-                fs::create_directories("static/src/components");
-            
-            fs::copy(path + "templates/components/template.svelte", "static/src/components/" + component + ".svelte");
-        }
-    }
+    run_subcommand(generate_command, new_controller, path, controller_name, controller_contents);
 
-    if (generate_command->got_subcommand(new_route)) {
-        for (auto&& route : route_name) {
-            std::cout << "Created New Route " << route << std::endl;
-            if (!fs::exists("static/src/routes"))
-                fs::create_directories("static/src/routes");
-            
-            fs::copy(path + "templates/routes/template.svelte", "static/src/routes/" + route + ".svelte");
-        }
-    }
+    std::array<std::string, 5> component_contents = {"Created New Component ", "static/src/components", "templates/components/template.svelte", "static/src/components/", ".svelte"};
+
+    run_subcommand(generate_command, new_component, path, component_name, component_contents);
+
+    std::array<std::string, 5> route_contents = {"Created New Route ", "static/src/routes", "templates/routes/template.svelte", "static/src/routes/", ".svelte"};
+
+    run_subcommand(generate_command, new_route, path, route_name, route_contents);
 
     return 0;
 }
