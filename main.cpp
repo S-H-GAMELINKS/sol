@@ -6,6 +6,13 @@
 
 namespace fs = std::experimental::filesystem;
 
+const std::string bin_path(){
+
+    fs::path p = "/proc/self/exe";
+
+    return std::regex_replace(fs::read_symlink(p).string<char>(), std::regex("bin/sol"), "");
+}
+
 int main(int argc, char **argv) {
     CLI::App app;
 
@@ -37,8 +44,7 @@ int main(int argc, char **argv) {
 
     CLI11_PARSE(app, argc, argv);
 
-    fs::path p = "/proc/self/exe";
-    std::string path = std::regex_replace(fs::read_symlink(p).string<char>(), std::regex("bin/sol"), "");
+    const std::string path = bin_path();
 
     if (app.got_subcommand(new_app)) {
         std::cout << "Created New App " << app_name << std::endl;
