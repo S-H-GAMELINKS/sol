@@ -37,6 +37,16 @@ CLI::App *create_generate_command(CLI::App *generate, const std::string& command
     return generate_command;
 }
 
+void create_new_app(CLI::App& app, CLI::App *new_app, const std::string& app_name, const std::string& path) {
+    if (app.got_subcommand(new_app)) {
+        std::cout << "Created New App " << app_name << std::endl;
+        fs::copy(path + "src", app_name, fs::copy_options::recursive);
+        fs::copy(path + "cpp-httplib", app_name + "/cpp-httplib");
+        std::string cmd = "cd " + app_name + " && cd static && yarn install";
+        system(cmd.c_str());
+    }    
+}
+
 void run_subcommand(CLI::App& app, CLI::App *sub_command, const std::string& content, const std::string& command) {
     if (app.got_subcommand(sub_command)) {
         std::cout << content << std::endl;
@@ -71,13 +81,7 @@ int main(int argc, char **argv) {
 
     const std::string path = bin_path();
 
-    if (app.got_subcommand(new_app)) {
-        std::cout << "Created New App " << app_name << std::endl;
-        fs::copy(path + "src", app_name, fs::copy_options::recursive);
-        fs::copy(path + "cpp-httplib", app_name + "/cpp-httplib");
-        std::string cmd = "cd " + app_name + " && cd static && yarn install";
-        system(cmd.c_str());
-    }
+    create_new_app(app, new_app, app_name, path);
 
     run_subcommand(app, server, "Running Server", "g++ main.cpp cpp-httplib/httplib.h -pthread && ./a.out");
 
