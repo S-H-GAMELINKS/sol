@@ -29,6 +29,14 @@ CLI::App *create_subcommand(CLI::App& app, const std::string& command, const std
     return server;
 }
 
+CLI::App *create_generate_command(CLI::App *generate, const std::string& command, std::vector<std::string>& args, const std::string& content) {
+
+    CLI::App *generate_command = generate->add_subcommand(command, content);
+    generate_command->add_option(command, args, content);
+
+    return generate_command;
+}
+
 int main(int argc, char **argv) {
     CLI::App app;
 
@@ -42,17 +50,14 @@ int main(int argc, char **argv) {
     CLI::App *generate_command = app.add_subcommand("generate", "Generate New File");
     generate_command->require_subcommand(0,1);
 
-    CLI::App *new_controller = generate_command->add_subcommand("controller", "Create New Controller");
     std::vector<std::string> controller_name;
-    new_controller->add_option("controller", controller_name, "Controller name");
+    CLI::App *new_controller = create_generate_command(generate_command, "controller", controller_name, "Create New Controller");
 
-    CLI::App *new_component = generate_command->add_subcommand("component", "Create New Component");
     std::vector<std::string> component_name;
-    new_component->add_option("component", component_name, "Component name");
+    CLI::App *new_component = create_generate_command(generate_command, "component", component_name, "Create New Component");
 
-    CLI::App *new_route = generate_command->add_subcommand("route", "Create New Route");
     std::vector<std::string> route_name;
-    new_route->add_option("route", route_name, "Route name");
+    CLI::App *new_route = create_generate_command(generate_command, "route", route_name, "Create New Route");
 
     CLI11_PARSE(app, argc, argv);
 
