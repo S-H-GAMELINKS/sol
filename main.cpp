@@ -28,6 +28,10 @@ int main(int argc, char **argv) {
     std::vector<std::string> component_name;
     new_component->add_option("component", component_name, "Component name");
 
+    CLI::App *new_route = generate_command->add_subcommand("route", "Create New Route");
+    std::vector<std::string> route_name;
+    new_route->add_option("route", route_name, "Route name");
+
     CLI11_PARSE(app, argc, argv);
 
     fs::path p = "/proc/self/exe";
@@ -61,6 +65,16 @@ int main(int argc, char **argv) {
                 fs::create_directories("static/src/components");
             
             fs::copy(path + "templates/components/template.svelte", "static/src/components/" + component + ".svelte");
+        }
+    }
+
+    if (generate_command->got_subcommand(new_route)) {
+        for (auto&& route : route_name) {
+            std::cout << "Created New Route " << route << std::endl;
+            if (!fs::exists("static/src/routes"))
+                fs::create_directories("static/src/routes");
+            
+            fs::copy(path + "templates/routes/template.svelte", "static/src/routes/" + route + ".svelte");
         }
     }
 
