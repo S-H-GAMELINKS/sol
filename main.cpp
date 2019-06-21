@@ -17,6 +17,9 @@ int main(int argc, char **argv) {
     CLI::App *server = app.add_subcommand("server", "Run Server");
     server->add_option("server", "Running Server");
 
+    CLI::App *build = app.add_subcommand("build", "Build App");
+    server->add_option("build", "Build App");
+
     CLI::App *generate_command = app.add_subcommand("generate", "Generate New File");
     generate_command->require_subcommand(0,1);
 
@@ -48,6 +51,12 @@ int main(int argc, char **argv) {
     if (app.got_subcommand(server)) {
         std::cout << "Running Server" << std::endl;
         std::string cmd = "g++ main.cpp cpp-httplib/httplib.h -pthread && ./a.out";
+        system(cmd.c_str());
+    }
+
+    if (app.got_subcommand(build)) {
+        std::cout << "Build App" << std::endl;
+        std::string cmd = "cd static && yarn build && cd .. && g++ main.cpp cpp-httplib/httplib.h -pthread";
         system(cmd.c_str());
     }
 
