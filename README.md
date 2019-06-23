@@ -24,3 +24,14 @@ sol build
 # Run Server
 sol server
 ```
+
+# Install
+
+```shell
+
+# Clone This Repo
+git clone https://github.com/S-H-GAMELINKS/sol.git ~/.sol
+
+# Add Path & Restart Bash
+echo 'export PATH="$HOME/.sol/bin:$PATH"' >> ~/.bashrc && exec bash
+```
