@@ -42,6 +42,7 @@ void create_new_app(CLI::App& app, CLI::App *new_app, const std::string& app_nam
         std::cout << "Created New App " << app_name << std::endl;
         fs::copy(path + "src", app_name, fs::copy_options::recursive);
         fs::copy(path + "cpp-httplib", app_name + "/cpp-httplib");
+        fs::copy(path + "sqlite_orm", app_name + "/sqlite_orm", fs::copy_options::recursive);
         std::string cmd = "cd " + app_name + " && cd static && yarn install";
         system(cmd.c_str());
     }    

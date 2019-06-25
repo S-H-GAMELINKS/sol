@@ -1,4 +1,5 @@
 #include "cpp-httplib/httplib.h"
+#include "sqlite_orm/include/sqlite_orm/sqlite_orm.h"
 #include <fstream>
 #include <sstream>
 #include <string>
