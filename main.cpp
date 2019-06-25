@@ -34,8 +34,8 @@ int main(int argc, char **argv) {
 
     create_new_app(app, new_app, app_name, path);
 
-    run_subcommand(app, server, "Running Server", "g++ main.cpp cpp-httplib/httplib.h -pthread && ./a.out");
-    run_subcommand(app, build, "Build App", "cd static && yarn build && cd .. && g++ main.cpp cpp-httplib/httplib.h -pthread");
+    run_subcommand(app, server, "Running Server", "g++ main.cpp cpp-httplib/httplib.h sqlite_orm/include/sqlite_orm/sqlite_orm.h -pthread -lsqlite3 && ./a.out");
+    run_subcommand(app, build, "Build App", "cd static && yarn build && cd .. && g++ main.cpp cpp-httplib/httplib.h sqlite_orm/include/sqlite_orm/sqlite_orm.h -pthread -lsqlite3");
 
     std::array<std::string, 4> controller_contents = {"Created New Controller ", "templates/controllers/template_controller.js", "static/src/controllers/", "_controller.js"};
     std::array<std::string, 5> component_contents = {"Created New Component ", "static/src/components", "templates/components/template.svelte", "static/src/components/", ".svelte"};
