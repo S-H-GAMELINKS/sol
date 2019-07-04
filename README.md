@@ -45,3 +45,5 @@ echo 'export PATH="$HOME/.sol/bin:$PATH"' >> ~/.bashrc && exec bash
 [Using Bootstrap Sample!](https://github.com/S-H-GAMELINKS/sol_bootstrap_example)
 
 [Counter Sample!](https://github.com/S-H-GAMELINKS/sol_counter_example)
+
+[Using Stimulus in Svelte](https://github.com/S-H-GAMELINKS/sol_stimulus_svelte_exsample)
