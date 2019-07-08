@@ -47,3 +47,5 @@ echo 'export PATH="$HOME/.sol/bin:$PATH"' >> ~/.bashrc && exec bash
 [Counter Sample!](https://github.com/S-H-GAMELINKS/sol_counter_example)
 
 [Using Stimulus in Svelte](https://github.com/S-H-GAMELINKS/sol_stimulus_svelte_exsample)
+
+[Using SQLite3 for ORM](https://github.com/S-H-GAMELINKS/sol_orm_sample)
