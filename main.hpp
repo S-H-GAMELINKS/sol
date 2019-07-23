@@ -31,12 +31,12 @@ CLI::App *create_subcommand(CLI::App& app, const std::string& command, std::stri
 CLI::App *create_subcommand(CLI::App& app, const std::string& command, const std::string& content) {
 
     // Add sub command
-    CLI::App *server = app.add_subcommand(command, content);
+    CLI::App *sub_command = app.add_subcommand(command, content);
 
     // Set command content
-    server->add_option(command, content);
+    sub_command->add_option(command, content);
 
-    return server;
+    return sub_command;
 }
 
 // Add generate sub command func  
